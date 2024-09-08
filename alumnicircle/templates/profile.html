@@ -1,0 +1,170 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="User profile page">
+    <meta name="keywords" content="profile, social media, user">
+    <title>Profile - {{user_profile.user.username}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/color.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <style>
+        @layer components {
+            .btn-primary {
+                @apply bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+            }
+            .btn-outline-primary {
+                @apply bg-transparent hover:bg-blue-600 text-blue-600 font-semibold hover:text-white py-2 px-4 border border-blue-600 hover:border-transparent rounded;
+            }
+        }
+        .profile-photo-container {
+            @apply relative inline-block;
+        }
+        .change-photo-label {
+            @apply absolute bottom-0 right-0 bg-blue-600 text-white p-1 rounded-full cursor-pointer text-xs;
+        }
+     
+    </style>
+</head>
+<body class="bg-blue-50">
+    {% if user_profile.is_verified %}
+    <header class="header-bg text-white shadow-md" style="background-image: url('{% static 'images/soa1.jpg' %}'); background-size: cover; background-position: center;">
+        {% else %}
+     <header class="header-bg text-white shadow-md" style="background-image: url('{% static 'images/cross.png' %}'); background-size: cover; background-position: center;">
+        {% endif %}
+        <div class="container mx-auto px-4 py-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/3 text-center mb-4 md:mb-0">
+                    <div class="profile-photo-container">
+                        <img src="{{ user_profile.profileimg.url }}" alt="Profile Picture" class="w-32 h-32 rounded-full border-4 border-white shadow-lg mx-auto">
+                        {% if user_object.username == user.username %}
+                        <label for="profile-photo-upload" class="change-photo-label">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </label>
+                        <input id="profile-photo-upload" type="file" class="hidden" accept="image/*">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="md:w-2/3 md:pl-8">
+                    {% if user_profile.is_verified %}
+                    <h1 class="text-5xl text-success font-bold mb-2 display-4">@{{user_profile.user.username}}</h1>
+                    {% else %}
+                    <h1 class="text-5xl text-warning font-bold mb-2 display-4">@{{user_profile.user.username}}</h1>
+                    {% endif %}
+                    <p class="mb-4">
+                        <span class="mr-5 text-muted">
+                            {% if user_post_length == 0 %}
+                                No Posts
+                            {% elif user_post_length == 1 %}
+                                {{user_post_length}} Post
+                            {% else %}
+                                {{user_post_length}} Posts
+                            {% endif %}
+                        </span>
+                        <span class="mr-5 text-dark text-truncate">
+                            {% if user_followers < 2 %}
+                                {{user_followers}} follower
+                            {% else %}
+                                {{user_followers}} followers
+                            {% endif %}
+                        </span>
+                        <span class="mr-5 text-dark">{{user_following}} following</span>
+                    </p>
+                    <div class="flex space-x-4 ">
+                        {% if user_profile.is_verified %}
+                        <form action="/follow/{{user_profile.user.username}}" method="POST" class="mb-4">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{user.username}}" name="follower" />
+                            <input type="hidden" value="{{user_object.username}}" name="user" />
+                            {% if user_object.username == user.username %}
+                                <a href="/setting" class="btn-outline-primary bg-white text-blue-600 hover:bg-blue-600 hover:text-white">Account Settings</a>
+                            {% else %}
+                                <button type="submit" class="btn-primary">{{button_text}}</button>
+                            {% endif %}
+                        </form>
+                      {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="md:col-span-2">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-bold mb-4 text-blue-800">Bio</h2>
+                    <p class="text-gray-700">{{user_profile.bio}}</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold mb-4 text-blue-800">Posts</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        {% for post in user_posts %}
+                            <a href="{{post.image.url}}" class="block">
+                                <img src="{{post.image.url}}" alt="User Post" class="w-full h-48 object-cover rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="md:col-span-1">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold mb-4 text-blue-800">About</h2>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                            </svg>
+                            <span>{{user_profile.user.username}}</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span>{{user_profile.user.email}}</span>
+                        </li>
+                        {% if user_profile.is_verified %}
+                        <li class="flex items-center">
+                            <a href="{{user_profile.user.link_url}}" class="flex items-center" target="_blank" rel="noopener noreferrer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z" clip-rule="evenodd" />
+                                </svg>
+                                <span>{{user_profile.user.link_url}}</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        <!-- Add more profile details here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/main.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        document.getElementById('profile-photo-upload').addEventListener('change', function(e) {
+            // Handle profile photo upload
+            console.log('Profile photo changed:', e.target.files[0]);
+            // You can add AJAX upload logic here
+        });
+
+        document.getElementById('upload-post-btn').addEventListener('click', function() {
+            // Handle new post upload
+            console.log('New post button clicked');
+            // You can open a modal or redirect to a new post page here
+        });
+    </script>
+</body>
+</html>

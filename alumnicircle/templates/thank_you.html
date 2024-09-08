@@ -1,0 +1,145 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumni Circle Feedback</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0a192f;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #e6f1ff;
+        }
+        .container {
+            background-color: rgba(17, 34, 64, 0.9);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 600px;
+        }
+        h1 {
+            color: #64ffda;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .feedback-types {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .feedback-type {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 80px;
+        }
+        .feedback-type i {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: #64ffda;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #8892b0;
+        }
+        input, select, textarea {
+            padding: 8px;
+            border: 1px solid #233554;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #172a45;
+            color: #e6f1ff;
+        }
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #64ffda;
+            color: #0a192f;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        button:hover {
+            background-color: #4cdbbd;
+            transform: translateY(-2px);
+        }
+        #thankYouMessage {
+            text-align: center;
+            display: none;
+        }
+        #thankYouMessage h2 {
+            color: #64ffda;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Alumni Circle Feedback</h1>
+        <div class="feedback-types">
+            <div class="feedback-type">
+                <i class="fas fa-lightbulb"></i>
+                <span>Idea</span>
+            </div>
+            <div class="feedback-type">
+                <i class="fas fa-chart-bar"></i>
+                <span>Result</span>
+            </div>
+            <div class="feedback-type">
+                <i class="fas fa-comments"></i>
+                <span>Opinion</span>
+            </div>
+            <div class="feedback-type">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Survey</span>
+            </div>
+            <div class="feedback-type">
+                <i class="fas fa-comment-alt"></i>
+                <span>Comment</span>
+            </div>
+        </div>
+        <div id="thankYouMessage" style="display: block;">
+            <h2>Thank You!</h2>
+            <p>Your feedback has been submitted successfully. We appreciate your input!</p>
+           <a href="{% url 'feedback' %}"> <button>Submit Another Response</button></a>
+        </div>
+    </div>
+
+    
+
+<audio class="audio-output" style="display: none;"></audio><div id="volume-booster-visusalizer">
+                    <div class="sound">
+                        <div class="sound-icon"></div>
+                        <div class="sound-wave sound-wave_one"></div>
+                        <div class="sound-wave sound-wave_two"></div>
+                        <div class="sound-wave sound-wave_three"></div>
+                    </div>
+                    <div class="segments-box">
+                        <div data-range="1-20" class="segment"><span></span></div>
+                        <div data-range="21-40" class="segment"><span></span></div>
+                        <div data-range="41-60" class="segment"><span></span></div>
+                        <div data-range="61-80" class="segment"><span></span></div>
+                        <div data-range="81-100" class="segment"><span></span></div>
+                    </div>
+                </div></body></html>

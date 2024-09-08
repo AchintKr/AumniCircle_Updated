@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumni Portal Donation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        .donation-amount-btn.active {
+            background-color: #1e40af;
+            color: white;
+        }
+        body {
+            background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/360_F_266183414_AF4yAeMvb4katnh1CAPhvhmmOjl0kpVk-Gh7GTfYjoXjRWGsg6Dr1y5gVmXwm3K.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .content-wrapper {
+            background-color: rgba(17, 24, 39, 0.8);
+            min-height: 100vh;
+        }
+        .glass-effect {
+            background: rgba(30, 58, 138, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="font-sans text-white">
+    <div class="content-wrapper">
+        <div class="container mx-auto p-4">
+            <h1 class="text-4xl font-bold text-center mb-8 text-white">Alumni Circle Donation</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-effect p-6">
+                    <h2 class="text-2xl font-semibold mb-6 text-white">Make a Donation</h2>
+                    <form id="donationForm" class="space-y-4" method="POST" action="{% url 'donate' %}">
+                        {% csrf_token %}
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2" for="donationType">
+                                Donation Type
+                            </label>
+                            <div class="flex space-x-4">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" class="form-radio text-blue-600" name="donationType" value="one-time" checked>
+                                    <span class="ml-2">One-time</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" class="form-radio text-blue-600" name="donationType" value="monthly">
+                                    <span class="ml-2">Monthly</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" class="form-radio text-blue-600" name="donationType" value="annually">
+                                    <span class="ml-2">Annually</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2" for="amount">
+                                Amount (INR)
+                            </label>
+                            <div class="flex space-x-2 mb-2">
+                                <button type="button" class="donation-amount-btn bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" data-amount="1000">₹1000</button>
+                                <button type="button" class="donation-amount-btn bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" data-amount="2000">₹2000</button>
+                                <button type="button" class="donation-amount-btn bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" data-amount="5000">₹5000</button>
+                            </div>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name ="amount" id="amount" type="number" placeholder="Enter custom amount">
+                        </div>
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2" for="fullName">
+                                Full Name
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name ="full" id="fullName" type="text" placeholder="Enter your full name">
+                        </div>
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2" for="email">
+                                Email
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="email" id="email" type="email" placeholder="Enter your email">
+                        </div>
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2" for="phone">
+                                Phone Number
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="ph" id="phone" type="tel" placeholder="Enter your phone number">
+                        </div>
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2" for="graduationYear">
+                                Graduation Year
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name = "gyear" id="graduationYear" type="number" placeholder="Enter your graduation year" min="1900" max="2099">
+                        </div>
+                        <div>
+                            <label class="block text-white text-sm font-bold mb-2" for="transactionId">
+                                Transaction ID
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="tid" id="transactionId" type="text" placeholder="Enter transaction ID">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <button class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:scale-105" type="submit">
+                                Donate Now
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="space-y-8">
+                    <div class="glass-effect p-6">
+                        <h2 class="text-2xl font-semibold mb-4 text-white">Latest Donations</h2>
+                        <ul id="latestDonations" class="space-y-2">
+                            <!-- Donations will be dynamically added here -->
+                            {% for donation in latest_donations %}
+                            <li class="bg-black p-4 rounded-lg shadow">
+                                <p class="font-semibold">{{ donation.full_name }}</p>
+                                <p>Amount: Rs.{{ donation.amount }}</p>
+                                <p>{{ donation.created_at|timesince }} ago </p>
+                            </li>
+                        {% empty %}
+                            <li>No recent donations yet.</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <div class="glass-effect p-6">
+                        <h2 class="text-2xl font-semibold mb-4 text-white">UPI Payment</h2>
+                        <div class="flex justify-center mb-4">
+                            <img src="{% static 'images/qr_code.jpg' %}" alt="UPI QR Code" class="w-48 h-48 object-cover rounded-lg pulse-animation">
+                        </div>
+                        <p class="text-center text-white">UPI ID: alumni@donation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Handle donation amount button clicks
+            $('.donation-amount-btn').click(function() {
+                $('.donation-amount-btn').removeClass('active');
+                $(this).addClass('active');
+                $('#amount').val($(this).data('amount'));
+            });
+
+            // Handle form submission
+            // Function to add a donation to the latest donations list
+            function addLatestDonation(name, amount) {
+                $('#latestDonations').prepend(
+                    '<li class="flex justify-between items-center bg-blue-900 bg-opacity-50 p-2 rounded">' +
+                    '<span>' + name + '</span>' +
+                    '<span class="font-bold text-green-300">₹' + amount + '</span>' +
+                    '</li>'
+                );
+            }
+
+        });
+    </script>
+
+</body>
+</html>
